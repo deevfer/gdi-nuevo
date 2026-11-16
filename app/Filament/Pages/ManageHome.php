@@ -220,6 +220,12 @@ class ManageHome extends Page
                         $this->area('platform_access.description', 'Descripción', 4),
                     ]),
 
+                Section::make('Imagen de fondo')
+                    ->description('Se utilizará la imagen original del diseño hasta que cargues una nueva desde el CMS.')
+                    ->schema([
+                        $this->image('platform_access.image', 'Imagen de fondo de Acceso a la plataforma'),
+                    ]),
+
                 Section::make('Botón de contacto')
                     ->schema([
                         $this->text('platform_access.button_text', 'Texto del botón'),

@@ -59,10 +59,23 @@ function imageUrl(path) {
     return `/storage/${value.replace(/^storage\//, '')}`;
 }
 
+// Imágenes originales incluidas en /public: se verán también al clonar el repositorio.
+// Si el CMS tiene una imagen cargada, esa imagen prevalece sobre la predeterminada.
+const IMAGE_BASE = '/images/gdi/home';
+
 const heroDesktop = computed(() =>
     imageUrl(hero.value.image_desktop || hero.value.image_mobile)
+    || `${IMAGE_BASE}/hero-arquitectura.png`
 );
 const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
+
+function audienceImage(card, index) {
+    return imageUrl(card.image) || `${IMAGE_BASE}/${index === 0 ? 'tarjeta-inversionistas.png' : 'tarjeta-empresas.png'}`;
+}
+
+const platformBackground = computed(() =>
+    imageUrl(platformAccess.value.image) || `${IMAGE_BASE}/acceso-plataforma.png`
+);
 </script>
 
 <template>
@@ -70,7 +83,7 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
     <main class="gdi-home">
         <!-- 1. PORTADA -->
         <section id="inicio" class="home-hero" aria-labelledby="home-hero-title">
-            <picture v-if="heroDesktop" class="hero-picture">
+            <picture class="hero-picture">
                 <source v-if="heroMobile" media="(max-width: 767px)" :srcset="heroMobile" />
                 <img :src="heroDesktop" alt="" />
             </picture>
@@ -209,7 +222,7 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
                         class="audience-card"
                         :class="index === 0 ? 'audience-investors' : 'audience-businesses'"
                     >
-                        <img v-if="card.image" class="audience-background" :src="imageUrl(card.image)" alt="" loading="lazy" />
+                        <img class="audience-background" :src="audienceImage(card, index)" alt="" loading="lazy" />
                         <div class="audience-shade" aria-hidden="true"></div>
 
                         <div class="audience-content">
@@ -229,6 +242,7 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 
         <!-- 5. ACCESO A LA PLATAFORMA -->
         <section id="acceso-plataforma" class="home-platform" aria-labelledby="home-platform-title">
+            <img class="platform-background" :src="platformBackground" alt="" loading="lazy" />
             <div class="home-container platform-content">
                 <p v-if="platformAccess.eyebrow" class="platform-eyebrow">
                     {{ platformAccess.eyebrow }}
@@ -268,7 +282,7 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 .gdi-home *, .gdi-home *::before, .gdi-home *::after { box-sizing: border-box; }
 .gdi-home h1, .gdi-home h2, .gdi-home h3, .gdi-home p { margin-top: 0; }
 .gdi-home a { text-decoration: none; }
-.home-container { width: min(100% - 44px, 1240px); margin-inline: auto; }
+.home-container { width: min(100% - 96px, 1240px); margin-inline: auto; }
 .section-eyebrow { margin-bottom: 22px; color: #58677a; font-size: 12px; font-weight: 400; letter-spacing: .055em; text-transform: uppercase; }
 .section-title { max-width: 980px; margin-bottom: 22px; font: 400 clamp(33px, 5vw, 48px)/1.15 var(--serif-font); letter-spacing: -.025em; }
 .section-intro { margin-bottom: 28px; color: #666a70; font-size: clamp(15px, 1.6vw, 18px); line-height: 1.4; }
@@ -278,7 +292,7 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
     position: relative;
     display: flex;
     align-items: center;
-    min-height: 570px;
+    min-height: 760px;
     isolation: isolate;
     overflow: hidden;
     color: #ffffff;
@@ -287,13 +301,13 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 .hero-picture, .hero-picture img, .hero-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero-picture { z-index: -2; }
 .hero-picture img { display: block; object-fit: cover; object-position: center; }
-.hero-shade { z-index: -1; background: linear-gradient(90deg, rgba(28,42,57,.91) 0%, rgba(30,44,59,.77) 51%, rgba(18,30,41,.28) 100%); }
-.hero-content { padding-top: 78px; padding-bottom: 80px; }
+.hero-shade { z-index: -1; background: linear-gradient(90deg, rgba(31,46,63,.55) 0%, rgba(30,44,59,.40) 47%, rgba(18,30,41,.16) 100%); }
+.hero-content { padding-top: 118px; padding-bottom: 110px; }
 .hero-title { max-width: 830px; margin-bottom: 30px; font: 400 clamp(42px, 5.2vw, 66px)/1.05 var(--serif-font); letter-spacing: -.027em; }
 .hero-title span { color: #c8915d; }
 .hero-description { max-width: 690px; margin-bottom: 0; font-size: clamp(15px, 1.55vw, 18px); line-height: 1.4; }
-.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 46px; }
-.hero-button { display: inline-flex; min-width: 164px; min-height: 48px; align-items: center; justify-content: center; gap: 12px; border: 1px solid transparent; border-radius: 14px; padding: 12px 20px; font-size: 13px; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 68px; }
+.hero-button { display: inline-flex; min-width: 164px; min-height: 48px; align-items: center; justify-content: center; gap: 12px; border: 1px solid transparent; border-radius: 999px; padding: 12px 24px; font-size: 13px; transition: background .2s ease, border-color .2s ease, color .2s ease; }
 .hero-button span, .platform-button span { font-size: 18px; line-height: 1; }
 .hero-button-primary { background: #ffffff; color: #1f2937; }
 .hero-button-primary:hover { background: #e8e9eb; }
@@ -301,9 +315,9 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 .hero-button-secondary:hover { background: rgba(255,255,255,.12); }
 
 /* 2. INFRAESTRUCTURA */
-.home-infrastructure { padding: 82px 0 88px; background: #fff; }
+.home-infrastructure { padding: 66px 0 82px; background: #fff; }
 .infra-title { max-width: 680px; color: var(--ink); }
-.infrastructure-diagram { padding: 64px 72px 54px; color: #fff; background: #253246; }
+.infrastructure-diagram { padding: 72px 72px 62px; color: #fff; background: #2a374a; }
 .diagram-columns { display: grid; grid-template-columns: 1fr 1.45fr 1fr; min-height: 300px; align-items: start; }
 .diagram-side { padding-top: 74px; text-align: center; }
 .diagram-side h3 { margin: 0 0 16px; border-bottom: 1px solid rgba(255,255,255,.5); padding-bottom: 13px; font: 400 17px/1.2 var(--serif-font); letter-spacing: .11em; }
@@ -322,14 +336,14 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 .diagram-footer-copy { max-width: 900px; margin: 0 auto; color: #c5cad0; font-size: 12px; line-height: 1.45; }
 
 /* 3. MODELO OPERATIVO */
-.home-operating { position: relative; isolation: isolate; overflow: hidden; padding: 75px 0 83px; color: #fff; background: #b98251; }
-.home-operating::before { position: absolute; z-index: -1; left: -120px; top: -110px; width: 520px; height: 700px; border: 75px solid rgba(138,82,35,.12); border-radius: 45%; transform: rotate(36deg); content: ''; }
-.home-operating::after { position: absolute; z-index: -1; right: 10%; bottom: -165px; width: 360px; height: 260px; border-radius: 50%; background: rgba(138,82,35,.13); content: ''; }
+.home-operating { position: relative; isolation: isolate; overflow: hidden; padding: 75px 0 83px; color: #fff; background: #ba8656; }
+.home-operating::before { position: absolute; z-index: -1; inset: 0; background: url('/images/gdi/home/textura-modelo-operativo.png') left center / auto 100% no-repeat; content: ''; pointer-events: none; }
+
 .light-eyebrow { color: #fff; }
 .operating-title { max-width: 1100px; }
 .operating-intro { max-width: 1100px; color: #fff; }
 .operating-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 32px; }
-.operating-card { min-height: 265px; padding: 30px 32px; color: #171717; background: #fff; }
+.operating-card { min-height: 340px; padding: 30px 32px; color: #253246; background: #fff; }
 .operating-number { margin-bottom: 4px; font-size: 19px; }
 .operating-card h3 { max-width: 240px; margin-bottom: 20px; font: 400 26px/1.12 var(--serif-font); }
 .operating-card > p:last-child { margin: 0; color: #656565; font-size: 14px; line-height: 1.42; }
@@ -339,25 +353,26 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 .audiences-title { max-width: 1100px; color: #171717; }
 .audiences-intro { max-width: 1100px; }
 .audiences-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; margin-top: 28px; }
-.audience-card { position: relative; display: flex; align-items: flex-end; min-height: 385px; isolation: isolate; overflow: hidden; color: white; background: #0c0c0e; }
+.audience-card { position: relative; display: flex; align-items: flex-end; min-height: 420px; isolation: isolate; overflow: hidden; color: white; background: #0b1f32; }
 .audience-background, .audience-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
 .audience-background { z-index: -2; object-fit: cover; }
-.audience-shade { z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,.54) 0%, rgba(0,0,0,.8) 42%, #090909 100%); }
+.audience-shade { z-index: -1; background: linear-gradient(180deg, rgba(9,28,48,.10) 0%, rgba(9,28,48,.22) 45%, rgba(4,15,29,.43) 100%); }
 .audience-content { display: flex; width: 100%; flex-direction: column; align-items: flex-start; padding: 28px 30px; }
 .audience-accent { display: block; width: 47px; height: 2px; margin-bottom: 15px; background: #ae88d0; }
 .audience-businesses .audience-accent { background: #cb965c; }
 .audience-content h3 { margin-bottom: 15px; font: 400 32px/1.1 var(--serif-font); }
-.audience-content p { margin-bottom: 14px; color: #b8b8b8; font-size: 13px; line-height: 1.5; }
+.audience-content p { margin-bottom: 14px; color: #e3e8ee; font-size: 13px; line-height: 1.5; }
 .audience-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; border-bottom: 1px solid rgba(255,255,255,.6); padding-bottom: 6px; color: #fff; font-size: 13px; font-weight: 600; }
 .audience-link:hover { color: #e4bd97; border-color: #e4bd97; }
 
 /* 5. ACCESO A LA PLATAFORMA */
-.home-platform { padding: 100px 0 112px; background: #253246; color: #fff; text-align: center; }
-.platform-content { display: flex; flex-direction: column; align-items: center; }
-.platform-eyebrow { margin-bottom: 28px; border: 1px solid rgba(255,255,255,.08); padding: 5px 12px; color: #aeb6c1; background: rgba(255,255,255,.05); font-size: 10px; letter-spacing: .08em; }
-.platform-title { max-width: 760px; margin-bottom: 24px; }
-.platform-description { max-width: 760px; margin-bottom: 36px; color: #a6aeb9; font-size: 16px; line-height: 1.45; }
-.platform-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-width: 215px; min-height: 48px; padding: 12px 22px; color: #242b35; background: #fff; font-size: 13px; transition: background .2s ease; }
+.home-platform { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; min-height: 564px; padding: 66px 0 90px; background: #021226; color: #fff; text-align: left; }
+.platform-background { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.platform-content { position: relative; display: flex; flex-direction: column; align-items: flex-start; }
+.platform-eyebrow { margin-bottom: 72px; padding: 0; color: #bcc7d2; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.platform-title { max-width: 760px; margin-bottom: 20px; }
+.platform-description { max-width: 930px; margin-bottom: 42px; color: #f2f5f8; font-size: 16px; line-height: 1.45; }
+.platform-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-width: 215px; min-height: 48px; border-radius: 999px; padding: 12px 22px; color: #242b35; background: #fff; font-size: 13px; transition: background .2s ease; }
 .platform-button:hover { background: #e7e9ed; }
 
 /* TABLET */
@@ -379,7 +394,7 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
 
     .home-hero { min-height: 650px; align-items: flex-end; }
     .hero-picture img { object-position: center; }
-    .hero-shade { background: linear-gradient(180deg, rgba(30,44,59,.42) 0%, rgba(29,43,58,.72) 38%, rgba(24,36,49,.98) 100%); }
+    .hero-shade { background: linear-gradient(180deg, rgba(30,44,59,.22) 0%, rgba(29,43,58,.45) 38%, rgba(24,36,49,.84) 100%); }
     .hero-content { padding-top: 110px; padding-bottom: 54px; }
     .hero-title { max-width: 600px; margin-bottom: 24px; font-size: clamp(38px, 9vw, 52px); line-height: 1.07; }
     .hero-description { font-size: 15px; line-height: 1.5; }
@@ -409,7 +424,9 @@ const heroMobile = computed(() => imageUrl(hero.value.image_mobile));
     .audience-content { padding: 24px; }
     .audience-content h3 { font-size: 30px; }
 
-    .home-platform { padding: 76px 0 84px; }
+    .home-platform { min-height: 500px; padding: 76px 0 84px; }
+    .platform-background { object-position: 57% center; }
+    .platform-eyebrow { margin-bottom: 50px; }
     .platform-title { margin-bottom: 22px; }
     .platform-description { font-size: 15px; line-height: 1.55; }
     .platform-button { width: min(100%, 300px); }
