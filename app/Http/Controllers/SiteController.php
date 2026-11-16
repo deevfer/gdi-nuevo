@@ -9,16 +9,27 @@ class SiteController extends Controller
 {
     public function home(): View
     {
+        return $this->renderPage('home');
+    }
+
+    public function platform(): View
+    {
+        return $this->renderPage('platform');
+    }
+
+    private function renderPage(string $page): View
+    {
         $sections = PageSection::query()
-            ->where('page', 'home')
+            ->where('page', $page)
             ->get()
-            ->mapWithKeys(fn (PageSection $item) => [
+            ->mapWithKeys(fn (PageSection $item): array => [
                 $item->section => $item->content ?? [],
             ])
             ->all();
 
         return view('site', [
-            'homeContent' => $sections,
+            'pageName' => $page,
+            'pageContent' => $sections,
             'seo' => $sections['seo'] ?? [],
         ]);
     }
