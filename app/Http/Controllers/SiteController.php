@@ -17,6 +17,11 @@ class SiteController extends Controller
         return $this->renderPage('platform');
     }
 
+    public function financing(): View
+    {
+        return $this->renderPage('financing');
+    }
+
     private function renderPage(string $page): View
     {
         $sections = PageSection::query()

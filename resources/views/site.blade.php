@@ -3,7 +3,11 @@
     $pageContent = $pageContent ?? [];
     $seo = $seo ?? [];
 
-    $fallbackTitle = $pageName === 'platform' ? 'Plataforma | GDI Valores' : 'GDI Valores | Inicio';
+    $fallbackTitle = match ($pageName) {
+        'platform' => 'Plataforma | GDI Valores',
+        'financing' => 'Financiamiento estructurado | GDI Valores',
+        default => 'GDI Valores | Inicio',
+    };
     $metaTitle = trim((string) ($seo['meta_title'] ?? '')) ?: $fallbackTitle;
     $metaDescription = trim((string) ($seo['meta_description'] ?? ''));
     $ogTitle = trim((string) ($seo['og_title'] ?? '')) ?: $metaTitle;

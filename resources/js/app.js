@@ -3,12 +3,18 @@ import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Home from './pages/Home.vue';
 import Plataforma from './pages/Plataforma.vue';
+import FinanciamientoEstructurado from './pages/FinanciamientoEstructurado.vue';
 
 const appElement = document.getElementById('app');
 
 if (appElement) {
     const sharedContent = window.gdiSharedContent ?? {};
-    const currentPage = window.gdiPageName === 'platform' ? Plataforma : Home;
+    const pages = {
+        home: Home,
+        platform: Plataforma,
+        financing: FinanciamientoEstructurado,
+    };
+    const currentPage = pages[window.gdiPageName] ?? Home;
     const currentContent = window.gdiPageContent ?? {};
 
     createApp({
