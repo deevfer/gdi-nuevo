@@ -29,6 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Cada usuario edita su nombre, email y contraseña en "Perfil" (menú de su cuenta).
+            ->profile(isSimple: false)
             ->brandName('GDI Valores · CMS')
             ->renderHook(PanelsRenderHook::HEAD_END, fn (): string => view('partials.favicons')->render())
             ->colors([

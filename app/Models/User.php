@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -19,6 +20,11 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    /** @var array<string, string> Todo usuario nuevo es webmaster. */
+    protected $attributes = [
+        'role' => 'webmaster',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -29,7 +35,14 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRole::class,
         ];
+    }
+
+    /** El rol no es asignable en masa: solo se cambia de forma explícita (ver gdi:super-admin). */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === UserRole::SuperAdmin;
     }
 
     /**
