@@ -300,13 +300,15 @@ function standardIcon(item, index) {
 .ecosystem-panel li p { margin: 4px 0 0; color: #a7b8c7; font-size: 11px; line-height: 1.5; }
 
 /* 7. Siguiente paso */
-.platform-next { background: #b98554; padding-block: 74px 100px; }
+.platform-next { position: relative; isolation: isolate; overflow: hidden; background: #b68150; padding-block: 74px 100px; }
+/* Textura del diseño: vector reflejado, multiplicado al 50 % en el lado derecho. */
+.platform-next::before { position: absolute; z-index: -1; top: 50%; left: 55%; width: 748px; height: 740px; background: url('/images/gdi/compartido/textura.svg') center / 100% 100% no-repeat; opacity: .5; mix-blend-mode: multiply; transform: translateY(-50%) scaleX(-1); content: ''; pointer-events: none; }
 .platform-next .eyebrow-light { color: #efdbc9; }
 .platform-next .light-title { max-width: 1060px; }
 .next-description { max-width: 1040px; color: #f5e6d9; }
 .next-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 32px; }
 .platform-button { display: inline-flex; align-items: center; justify-content: center; gap: 11px; min-height: 48px; padding: 12px 23px; border-radius: 999px; font-size: 12px; text-decoration: none; text-align: center; transition: background-color .2s ease; }
-.primary-button { background: #fff; color: #b98554; }
+.primary-button { background: #fff; color: #b68150; }
 .primary-button:hover { background: #f7f0e9; }
 .secondary-button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.85); }
 .secondary-button:hover { background: rgba(255,255,255,.12); }

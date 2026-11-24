@@ -10,6 +10,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             HomePageSeeder::class,
+            PlatformPageSeeder::class,
+            FinancingPageSeeder::class,
+            InvestorsPageSeeder::class,
+            StrategiesPageSeeder::class,
+            InsightsPageSeeder::class,
+            ContactPageSeeder::class,
+            GlobalContentSeeder::class,
         ]);
     }
 }

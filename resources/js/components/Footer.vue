@@ -41,8 +41,9 @@ const description = computed(() => props.content.description ||
 const groups = computed(() => Array.isArray(props.content.groups)
     ? props.content.groups : defaultGroups
 );
-const copyright = computed(() => props.content.copyright ||
-    `© ${new Date().getFullYear()} GDI Valores. Todos los derechos reservados.`
+// {año} se reemplaza por el año actual para que el CMS no tenga que actualizarlo cada enero.
+const copyright = computed(() => (props.content.copyright ||
+    '© {año} GDI Valores. Todos los derechos reservados.').replace('{año}', new Date().getFullYear())
 );
 const bottomNote = computed(() => props.content.bottom_note || 'Miembro del ecosistema Aura Capital');
 </script>

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import GdiLogo from '../components/GdiLogo.vue';
 
 // Laravel entrega el contenido de Filament mediante app.js.
 const props = defineProps({
@@ -91,7 +92,7 @@ const platformBackground = computed(() =>
 
             <div class="home-container hero-content">
                 <h1 id="home-hero-title" class="hero-title">
-                    {{ heroTitle.normal }}<template v-if="heroTitle.accent"> <span>{{ heroTitle.accent }}</span></template>
+                    {{ heroTitle.normal }} <span v-if="heroTitle.accent">{{ heroTitle.accent }}</span>
                 </h1>
 
                 <p v-if="hero.description" class="hero-description">
@@ -145,9 +146,8 @@ const platformBackground = computed(() =>
                         </div>
 
                         <div class="diagram-center">
-                            <div class="diagram-brand" aria-label="GDI Valores">
-                                <span class="brand-gdi">gdi<span class="brand-mark" aria-hidden="true">◆</span></span>
-                                <span class="brand-valores">Valores</span>
+                            <div class="diagram-brand">
+                                <GdiLogo class="brand-logo" />
                             </div>
                             <h3>{{ diagram.center_title }}</h3>
                             <ul>
@@ -325,10 +325,8 @@ const platformBackground = computed(() =>
 .diagram-side li { font-size: 13px; line-height: 1.25; font-weight: 600; }
 .diagram-center { min-height: 305px; border-inline: 1px solid rgba(255,255,255,.6); text-align: center; }
 .diagram-brand { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 116px; }
-.brand-gdi { font: 800 clamp(54px, 6vw, 76px)/.85 Arial, sans-serif; letter-spacing: -.08em; }
-.brand-mark { display: inline-block; margin-left: 8px; color: #be8656; font-size: .42em; vertical-align: 35%; transform: rotate(15deg); }
-.brand-valores { margin-top: 4px; margin-left: 30px; color: #c28c60; font: 700 16px/1 Arial, sans-serif; }
-.diagram-center h3 { min-height: 64px; margin: 0; border-block: 1px solid rgba(255,255,255,.5); padding: 13px 12px; color: #c58f60; font: 400 18px/1.2 var(--serif-font); }
+.brand-logo { width: min(100%, 230px); }
+.diagram-center h3 { min-height: 64px; margin: 0; border-bottom: 1px solid rgba(255,255,255,.5); padding: 13px 12px; color: #c58f60; font: 400 18px/1.2 var(--serif-font); }
 .diagram-center ul { display: grid; gap: 13px; margin: 0; padding: 15px 8px 0; list-style: none; }
 .diagram-center li { font: 400 17px/1.2 var(--serif-font); }
 .diagram-footer { margin-top: 32px; border-top: 1px solid rgba(255,255,255,.5); padding-top: 26px; text-align: center; }
@@ -337,7 +335,7 @@ const platformBackground = computed(() =>
 
 /* 3. MODELO OPERATIVO */
 .home-operating { position: relative; isolation: isolate; overflow: hidden; padding: 75px 0 83px; color: #fff; background: #ba8656; }
-.home-operating::before { position: absolute; z-index: -1; inset: 0; background: url('/images/gdi/home/textura-modelo-operativo.png') left center / auto 100% no-repeat; content: ''; pointer-events: none; }
+.home-operating::before { position: absolute; z-index: -1; top: 0; bottom: 0; left: -208px; width: 748px; background: url('/images/gdi/compartido/textura.svg') center / 100% 100% no-repeat; opacity: .5; mix-blend-mode: multiply; content: ''; pointer-events: none; }
 
 .light-eyebrow { color: #fff; }
 .operating-title { max-width: 1100px; }
@@ -358,8 +356,7 @@ const platformBackground = computed(() =>
 .audience-background { z-index: -2; object-fit: cover; }
 .audience-shade { z-index: -1; background: linear-gradient(180deg, rgba(9,28,48,.10) 0%, rgba(9,28,48,.22) 45%, rgba(4,15,29,.43) 100%); }
 .audience-content { display: flex; width: 100%; flex-direction: column; align-items: flex-start; padding: 28px 30px; }
-.audience-accent { display: block; width: 47px; height: 2px; margin-bottom: 15px; background: #ae88d0; }
-.audience-businesses .audience-accent { background: #cb965c; }
+.audience-accent { display: block; width: 48px; height: 3px; margin-bottom: 15px; background: linear-gradient(90deg, #b68150, rgba(182,129,80,0)); }
 .audience-content h3 { margin-bottom: 15px; font: 400 32px/1.1 var(--serif-font); }
 .audience-content p { margin-bottom: 14px; color: #e3e8ee; font-size: 13px; line-height: 1.5; }
 .audience-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; border-bottom: 1px solid rgba(255,255,255,.6); padding-bottom: 6px; color: #fff; font-size: 13px; font-weight: 600; }

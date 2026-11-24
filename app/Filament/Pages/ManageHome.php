@@ -2,7 +2,11 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Concerns\HasLivePreview;
+use App\Filament\Support\SeoFields;
 use App\Models\PageSection;
+use App\Services\SiteSeo;
+use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -17,15 +21,26 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\DB;
+use UnitEnum;
 
 class ManageHome extends Page
 {
+    use HasLivePreview;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Páginas del sitio';
+
     protected string $view = 'filament.pages.manage-home';
 
     protected static ?string $title = 'Administrar Inicio';
+
     protected static ?string $navigationLabel = 'Inicio';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHome;
+
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $slug = 'manage-home';
 
     public ?array $data = [];
@@ -235,25 +250,7 @@ class ManageHome extends Page
             ],
 
             // 6. SEO
-            'seo' => [
-                Section::make('SEO básico')
-                    ->description('Metadatos que se utilizarán en el HTML de la página de Inicio.')
-                    ->schema([
-                        $this->text('seo.meta_title', 'Metatítulo')
-                            ->maxLength(255)
-                            ->helperText('Como referencia, aproximadamente 50 a 60 caracteres.'),
-                        $this->area('seo.meta_description', 'Metadescripción', 4)
-                            ->helperText('Como referencia, aproximadamente 140 a 160 caracteres.'),
-                    ]),
-
-                Section::make('LinkedIn y redes sociales (Open Graph)')
-                    ->schema([
-                        $this->text('seo.og_title', 'Título para redes sociales')->maxLength(255),
-                        $this->area('seo.og_description', 'Descripción para redes sociales', 4),
-                        $this->image('seo.og_image', 'Imagen para redes sociales', 'gdi/seo')
-                            ->helperText('Recomendado: 1200 × 630 píxeles.'),
-                    ]),
-            ],
+            'seo' => SeoFields::schema('home'),
 
             default => [],
         };
@@ -307,8 +304,8 @@ class ManageHome extends Page
             ->send();
     }
 
-    public function getMaxContentWidth(): Width
+    protected function previewPath(?string $statePath = null): string
     {
-        return Width::Full;
+        return app(SiteSeo::class)->path('home');
     }
 }

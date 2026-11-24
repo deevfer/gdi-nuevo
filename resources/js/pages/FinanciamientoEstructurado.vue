@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import NextStepBanner from '../components/NextStepBanner.vue';
 
 
 const props = defineProps({
@@ -160,16 +161,7 @@ function instrumentIcon(card, index) {
         </section>
 
         <!-- 7. SIGUIENTE PASO -->
-        <section id="financiamiento-siguiente-paso" class="financing-next-step" aria-labelledby="financing-next-title">
-            <div class="financing-container">
-                <p v-if="nextStep.eyebrow" class="financing-eyebrow light-eyebrow">{{ nextStep.eyebrow }}</p>
-                <h2 id="financing-next-title">{{ nextStep.title }}</h2>
-                <p v-if="nextStep.description">{{ nextStep.description }}</p>
-                <a v-if="nextStep.button_text && nextStep.button_url" class="financing-link next-link" :href="nextStep.button_url">
-                    {{ nextStep.button_text }} <span aria-hidden="true">→</span>
-                </a>
-            </div>
-        </section>
+        <NextStepBanner :content="nextStep" section-id="financiamiento-siguiente-paso" />
     </main>
 </template>
 
@@ -201,7 +193,9 @@ function instrumentIcon(card, index) {
 /* 2. Problema / solución */
 .financing-problem-solution { padding-block: 70px; background: #fff; }
 .problem-grid { display: grid; gap: 38px; }
-.problem-column { border-left: 2px solid #bc895a; padding-left: 20px; }
+.problem-column { position: relative; padding-left: 24px; }
+/* Barra lateral corta en bronce que se desvanece hacia abajo, como en Figma. */
+.problem-column::before { position: absolute; top: 0; left: 0; width: 4px; height: 96px; background: linear-gradient(180deg, #b68150, rgba(182,129,80,0)); content: ''; }
 .problem-column h2 { margin: 0 0 22px; font: 400 clamp(30px, 5.5vw, 43px)/1.12 Georgia, 'Times New Roman', serif; }
 .problem-column p:not(.financing-eyebrow) { max-width: 530px; margin: 15px 0 0; color: #6e7886; font-size: 14px; line-height: 1.7; }
 
@@ -210,10 +204,10 @@ function instrumentIcon(card, index) {
 .companies-photo,
 .companies-shade { position: absolute; inset: 0; height: 100%; width: 100%; }
 .companies-photo { z-index: -2; object-fit: cover; object-position: center; }
-.companies-shade { z-index: -1; background: linear-gradient(90deg, rgba(171, 112, 62, .63), rgba(184, 122, 72, .3)); }
+.companies-shade { z-index: -1; background: linear-gradient(90deg, #b68150 0%, rgba(182,129,80,.86) 25%, rgba(182,129,80,.8) 50%, rgba(182,129,80,.7) 75%, rgba(182,129,80,.6) 100%); }
 .companies-copy { padding-block: 68px; }
 .companies-kicker { margin: 28px 0 23px; color: #f6e4d7; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
-.financing-companies h2 { max-width: 690px; margin: 0 0 30px; font: 400 clamp(34px, 6.8vw, 58px)/1.07 Georgia, 'Times New Roman', serif; letter-spacing: -.023em; }
+.financing-companies h2 { max-width: 560px; margin: 0 0 30px; font: 400 clamp(34px, 6.8vw, 58px)/1.07 Georgia, 'Times New Roman', serif; letter-spacing: -.023em; }
 .companies-link { text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }
 
 /* 4. Metodología */
@@ -249,13 +243,6 @@ function instrumentIcon(card, index) {
 .target-card h3 { margin: 0 0 12px; color: #bb8959; font: 400 24px/1.18 Georgia, 'Times New Roman', serif; }
 .target-card p { margin: 0; color: #737d89; font-size: 12px; line-height: 1.65; }
 
-/* 7. Siguiente paso */
-.financing-next-step { position: relative; isolation: isolate; overflow: hidden; padding-block: 90px 105px; background: linear-gradient(120deg, #273549, #2d3b50); color: #fff; }
-.financing-next-step::before { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(28deg, transparent 44%, rgba(255,255,255,.025) 44%, rgba(255,255,255,.025) 69%, transparent 69%); }
-.financing-next-step h2 { max-width: 900px; margin: 0; font: 400 clamp(32px, 6vw, 52px)/1.12 Georgia, 'Times New Roman', serif; }
-.financing-next-step p:not(.financing-eyebrow) { max-width: 830px; margin: 18px 0 26px; color: #d5dce7; font-size: 14px; line-height: 1.7; }
-.next-link { border-color: #fff; background: #fff; color: #29384c; }
-.next-link:hover { background: #f2ece7; }
 
 @media (min-width: 640px) {
     .financing-container { width: min(100% - 64px, 1200px); }
@@ -276,7 +263,6 @@ function instrumentIcon(card, index) {
     .target-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
     .financing-instruments { padding-block: 100px 110px; }
     .financing-target { padding-block: 95px 110px; }
-    .financing-next-step { padding-block: 110px 125px; }
 }
 @media (min-width: 1100px) {
     .financing-container { width: min(100% - 92px, 1200px); }

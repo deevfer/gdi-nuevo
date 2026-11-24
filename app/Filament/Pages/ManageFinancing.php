@@ -2,7 +2,11 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Concerns\HasLivePreview;
+use App\Filament\Support\SeoFields;
 use App\Models\PageSection;
+use App\Services\SiteSeo;
+use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -16,15 +20,26 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\DB;
+use UnitEnum;
 
 class ManageFinancing extends Page
 {
+    use HasLivePreview;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Páginas del sitio';
+
     protected string $view = 'filament.pages.manage-financing';
 
     protected static ?string $title = 'Administrar Financiamiento estructurado';
+
     protected static ?string $navigationLabel = 'Financiamiento estructurado';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+
+    protected static ?int $navigationSort = 3;
+
     protected static ?string $slug = 'manage-financing';
 
     public ?array $data = [];
@@ -162,7 +177,7 @@ class ManageFinancing extends Page
                                     ->deletable(false)
                                     ->reorderable(false),
                             ])
-                            ->itemLabel(fn (array $state): ?string => trim(($state['number'] ?? '') . ' · ' . ($state['title'] ?? 'Etapa')))
+                            ->itemLabel(fn (array $state): ?string => trim(($state['number'] ?? '').' · '.($state['title'] ?? 'Etapa')))
                             ->collapsed()
                             ->minItems(3)
                             ->maxItems(3)
@@ -236,22 +251,7 @@ class ManageFinancing extends Page
                     ]),
             ],
 
-            'seo' => [
-                Section::make('SEO básico')
-                    ->schema([
-                        $this->text('seo.meta_title', 'Metatítulo')->maxLength(255),
-                        $this->area('seo.meta_description', 'Metadescripción', 4),
-                        $this->text('seo.canonical_url', 'URL canónica (opcional)')
-                            ->helperText('Si se deja vacía, se podrá generar desde la URL de la página.'),
-                    ]),
-                Section::make('LinkedIn y redes sociales (Open Graph)')
-                    ->schema([
-                        $this->text('seo.og_title', 'Título para redes sociales')->maxLength(255),
-                        $this->area('seo.og_description', 'Descripción para redes sociales', 4),
-                        $this->image('seo.og_image', 'Imagen para redes sociales', 'gdi/seo')
-                            ->helperText('Recomendado: 1200 × 630 píxeles.'),
-                    ]),
-            ],
+            'seo' => SeoFields::schema('financing'),
 
             default => [],
         };
@@ -306,8 +306,8 @@ class ManageFinancing extends Page
             ->send();
     }
 
-    public function getMaxContentWidth(): Width
+    protected function previewPath(?string $statePath = null): string
     {
-        return Width::Full;
+        return app(SiteSeo::class)->path('financing');
     }
 }
